@@ -49,9 +49,8 @@ jobs:
       - run:
           name: Build and push master Docker image
           command: |
-            docker buildx build --platform=linux/arm64,linux/amd64 --no-cache --tag spectolabs/hoverfly:master --push .
             docker login --username $DOCKER_USER --password $DOCKER_PASS
-            docker push spectolabs/hoverfly:master
+            docker buildx build --platform=linux/arm64,linux/amd64 --no-cache --tag spectolabs/hoverfly:master --push .
       - run:
           name: Install gox
           command: |
@@ -78,7 +77,7 @@ jobs:
           command: |
             cd ./target && for f in hoverfly_bundle*;do ../google-cloud-sdk/bin/gsutil cp $f gs://hoverfly-master-builds/latest/$f; done
       - run:
-          name: Set read access in GCS            
+          name: Set read access in GCS
           command: |
             ./google-cloud-sdk/bin/gsutil -m acl set -R -a public-read gs://hoverfly-master-builds
     # The resource_class feature allows configuring CPU and RAM resources for each job. Different resource classes are available for different executors. https://circleci.com/docs/2.0/configuration-reference/#resourceclass
